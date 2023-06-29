@@ -1,3 +1,4 @@
+[![Board Status](https://dev.azure.com/mlops-field/c4a73005-3da3-411a-806b-e3fc770a2d0f/b4d02123-12a2-46bc-b717-3862eac0b33f/_apis/work/boardbadge/c154e447-6da6-4e54-9da2-880c03bd8e89)](https://dev.azure.com/mlops-field/c4a73005-3da3-411a-806b-e3fc770a2d0f/_boards/board/t/b4d02123-12a2-46bc-b717-3862eac0b33f/Microsoft.RequirementCategory)
 # MLOps Template
 MLOps template is a repo created by Microsoft's West Region CSU that provides several tools and templates to facilitate modern MLOps practices.
 Currently, the repo offers following:
