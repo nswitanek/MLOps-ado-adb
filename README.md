@@ -2,7 +2,7 @@
 # MLOps with Azure DevOps and Azure Databricks
 MLOps-ado-adb is a repo created by Microsoft field personnel (GBB, CSA, MTC) that provides a template to facilitate an introductory workshop on modern MLOps practices, using Azure DevOps for CI/CD pipelines and Azure Databricks for ML asset development and compute. This repo is modeled after the [work](https://github.com/microsoft/MLOpsTemplate/) of Microsoft's West Region CSU, which instead uses GitHub Actions and Azure Machine Learning.
 
-Currently, the repo offers the following:
+Here is the link to the workshop materials:
 - [MLOps workshop materials](/src/workshop/)
 
 
