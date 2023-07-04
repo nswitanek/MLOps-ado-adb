@@ -63,7 +63,7 @@ Your team has been working on a new machine learning (ML) problem (predicting wh
 team has been performing exploratory work on the data and has come to a state where the model is solidified.
 Now, it is time to put a structure into the work so that the team can iterate faster toward building better and better models. So far, team members have been working mostly with Azure Databricks notebooks on various clusters. 
 
-To re-engineer this into a functional MLOps process, the following steps will be taken:
+To re-engineer this to align with MLOps processes, the following steps will be taken:
 1. The notebook will be modularized (refactored into separate notebooks) and parameterized (configured so they
    can be re-run with different values). This will lay the foundation for good software practices and allow
    multiple data scientists/engineers to work collaboratively on the code. (Later, we will reinforce DevOps
