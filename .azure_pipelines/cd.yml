@@ -1,0 +1,44 @@
+trigger:
+  branches:
+    include:
+    - dev
+  paths:
+    include:
+    - src/scoring
+resources:
+  pipelines:
+  - pipeline: ci # Name of the pipeline resource.
+    source: ci # The name of the pipeline referenced by this pipeline resource.
+    trigger: 
+      tags: updated_model # Run cd pipeline when ci pipeline results in updated model
+
+variables:
+- template: variables.yml
+stages:
+- stage: deploy_batch_scoring
+  displayName: Deploy and Test Batch Scoring Job
+  jobs:
+  - job: deploy_batch_scoring
+    steps:
+    - task: ShellScript@2
+      displayName: 'Install Requirements'
+      inputs: 
+       scriptPath: 'src/install_requirements.sh'
+    - template: templates/aml-model-register/step.yml
+      parameters:
+        azureServiceConnectionName: ${{ variables.azureServiceConnection }}
+        azureServiceConnectionNameTarget: ${{ variables.azureServiceConnectionProd }}
+        name: ${{ variables.name }}
+        workspaceName: ${{ variables.workspace }}
+        workspaceNameTarget: ${{ variables.workspaceProd }}
+        resourceGroup: ${{ variables.resourcegroup }}
+        resourceGroupTarget: ${{ variables.resourcegroupProd }}
+        modelPath: ${{ variables.modelPath }}
+    - template: templates/aml-endpoint-deploy/step.yaml
+      parameters:
+        azureServiceConnectionName: ${{ variables.azureServiceConnection }}
+        endpointFile: src/scoring/endpoint.yml
+        deploymentFile: src/scoring/blue-deployment.yml
+        modelVersion: latest
+        workspaceName: ${{ variables.workspace }}
+        resourceGroup: ${{ variables.resourcegroup }}

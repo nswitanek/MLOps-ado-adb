@@ -1,0 +1,33 @@
+trigger:
+  branches:
+    include:
+    - dev
+  paths:
+    include:
+    - src/*
+
+variables:
+- template: variables.yml
+
+pool:
+  vmImage: ubuntu-latest
+
+stages:
+- stage: train_validate
+  displayName: Train and Validate Model
+  jobs:
+  - job: train_validate
+    steps:
+    - task: ShellScript@2
+      displayName: 'Install Requirements'
+      inputs: 
+       scriptPath: 'src/install_requirements.sh'
+    - template: templates/aml-job-create/step.yml
+      parameters:
+        azureServiceConnectionName: ${{ variables.azureServiceConnection }}
+        name: ${{ variables.jobname }}
+        jobFile: src/training_pipeline.yml
+        workspaceName: ${{ variables.workspace }}
+        resourceGroup: ${{ variables.resourcegroup }}
+        noWait: false
+        stepDisplayName: Submitting job
