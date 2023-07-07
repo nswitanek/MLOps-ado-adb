@@ -2,8 +2,9 @@
 > Note: Read the Workshop scenario overview [here](https://github.com/microsoft/MLOpsTemplate/blob/main/src/workshop/README.md#workshop-scenario)
 
 ## Goal
-- Setup Azure ML workspace and components
+- Setup Azure Databricks workspace
 - Setup github account, a personal access token and configure settings
+- Setup Azure DevOps
 - Setup local python development environment
 - Generate and register data for the workshop
 - Setup SP (Service Principal)
