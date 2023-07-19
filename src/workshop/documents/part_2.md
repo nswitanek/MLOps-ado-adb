@@ -1,21 +1,21 @@
 
-# Part 2: Use cloud scale compute to run, deploy and manage ML experiment with Azure ML
+# Part 2:  Preparing jobs and workflows for remote triggering and tracking
 
 ## Pre-requisites
 - Complete [Part 0](part_0.md), [Part 1](part_1.md)
-- Run each module feature_engineering, ml_training and evaluating successfully in local mode
-- Have Azure ML workspace setup with a Compute Cluster named ```cpu-cluster```
+- Run each notebook feature_engineering, ml_training and evaluating successfully via the Databricks notebook UI
+- [TODO address whether this part needs to use different compute - possibly job cluster?]Have Azure ML workspace setup with a Compute Cluster named ```cpu-cluster```
 
 ## Summary 
-After successfully restructuring the jupyter notebook and run modules locally, your team wants to leverage Azure cloud to run the experiment at scale.
-They also want to take advantage of experiment tracking and model management capabilities in Azure ML to keep track of experiment. 
-Finally, the team wants to deploy the model as a rest endpoint for real time inferencing and experience the option of deploying it as batch inferencing.
+After successfully restructuring the monolithic Databricks notebook into task-focused, modular notebooks, and running those modules via the Databricks UI, your team wants to prepare to run the notebooks automatically in response to code changes.
+They also want to take advantage of experiment tracking and model management capabilities of [MLflow](https://mlflow.org/) to keep track of the experiment, model metrics, and model assets. 
+Finally, the team wants to deploy the model for batch inferencing.
 To accomplish these goals, you will perform the following:
-- Run feature_engineering module as a job in Azure AML 
-- Run ml_training module as a job in Azure ML and observe the experiment metrics 
-- Run evaluating module as a job in Azure ML and observe how the model can be registered to Azure ML model's repo
-- Run the three modules together as a pipeline
-- Deploy and test the produced ML model as an API using Azure Managed Online Endpoint
+- Run the feature_engineering notebook as a job in Azure Databricks 
+- Run the ml_training notebook as a job in Azure Databricks and observe the experiment metrics 
+- Run the evaluating notebook as a job in Azure Databricks and observe how the model can be registered to MLflow 
+- Run the three jobs together as a workflow
+- Deploy and test the resulting model [originally: "as an API using Azure Managed Online Endpoint" TODO: determine the deployment pattern and then replace the description as appropriate]
 
 
 ## Steps
