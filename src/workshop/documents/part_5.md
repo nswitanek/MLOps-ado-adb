@@ -1,24 +1,24 @@
-# Part 5: Continuous Deployment (CD)
+# Part 5: Continuous Delivery (CD)
 
 ## Pre-requisites
 - Complete [Part 0](part_0.md), [Part 1](part_1.md), [Part 2](part_2.md), [Part 3](part_3.md) and [Part 4](part_4.md)
 
 ## Summary 
 
-After a successful run of the CI pipeline, your team is looking to complete the process with a CD pipeline that will handle the deployment of the model without introducing any downtime in production (otherwise termed as a "hot swap").
+After a successful run of the CI (continuous integration) pipeline, your team is looking to complete the process with a CD (continuous delivery, or continuous deployment) pipeline that will handle the deployment of the new, better-performing model while maintaining continuous delivery of the model to processes that depend on the model's availability, without introducing any downtime in production, also known as a "hot swap".
 
 The goal of this section is to get a fully functional CD pipeline that will:
     
 1. Trigger based on creation of a Pull Request (PR) to main.
-2. Login to Azure using a Service Principal to be able to leverage the Azure ML CLI commands in your workflow.
-3. Create a model API endpoint (webservice) using an Azure ML Managed Endpoint and deploy the model to the endpoint into one of the two deployment slots (blue/green slots, which will switch staging/production roles).
-    - Test the deployment to the endpoint of the new model.
+2. Login to Azure using a Service Principal to be able to leverage the Azure Databricks commands in your workflow.
+3. If the model performance metrics show improvement over the current production model, then promote the new model to production and demote the old to staging.
+    - Test the deployment of the new model.
     - On success of test, swap the deployment to accept 100% of the service endpoint traffic (and therefore become 'production').
-4. Add a Branch Protection rule in GitHub.
+4. Add a Branch Protection rule in Azure DevOps.
 
 ## Steps
 
-1. You define triggers as part of a GitHub Actions workflow. The triggers for this workshop have already been defined in `.github/workflows/workshop_cd.yml`. Please review this file to understand how we've establised a trigger mechanism to enable a deployment of code that has succesfully passed CI, and is ready to be deployed to production.
+1. You define triggers as part of a Azure Pipelines workflow. The triggers for this workshop have already been defined in `.github/workflows/workshop_cd.yml`. Please review this file to understand how we've establised a trigger mechanism to enable a deployment of code that has succesfully passed CI, and is ready to be deployed to production.
 
     Review the key elements of the trigger section:
 
