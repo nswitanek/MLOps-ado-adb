@@ -1,13 +1,13 @@
 
-# Part 3: Use GitHub for Version Control and Automation
+# Part 3: Use Azure DevOps and git for Automation and Version Control
 
 ## Pre-requisites
 - Complete [Part 0](part_0.md), [Part 1](part_1.md), [Part 2](part_2.md)
 
 ## Summary
-Your team wants to learn how to automate and orchestrate common tasks such as environment setup, training, testing using GitHub Actions. To accomplish this, the following steps will be performed:
-- Setup a centralized version control to keep track of project code and manage different feature development tracks and releases
-- Learn how to automate and orchestrate common tasks such as environment setup, training, testing by setting up a unit test workflow to run when code is updated in your branch
+Your team wants to automate and orchestrate common tasks such as environment setup, training, testing using Azure Pipelines in Azure DevOps. To accomplish this, the following steps will be performed:
+- Use git for centralized version control to keep track of project code and to manage different feature development tracks and releases
+- Automate and orchestrate common tasks such as environment setup, training, testing by setting up a unit test workflow to run when code is updated in your branch
 
 ## Steps
 1. Move to your dev branch you created in step 1 if you are not already there.
