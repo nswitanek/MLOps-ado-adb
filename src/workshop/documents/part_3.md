@@ -66,6 +66,7 @@ Your team wants to automate and orchestrate common tasks such as environment set
 - Trigger was created on the workflow file ```workshop_unit_test.yml``` to run on a push to your feature branch
 - Understand the additional updates that were made to ```feature_engineering.yml``` file for it to use your secrets and AML resources
 - Workflow was successfully triggered by pushing changes to your feature branch
+- Job run was launched in Databricks
 
 ## Reference materials
 - [GitHub Actions](https://github.com/features/actions)
