@@ -1,14 +1,13 @@
 
 # Part 1: Structure code for fast iterative development
 ## Pre-requisites
-- Complete [Part 0](part_0.md) to setup the Azure Databricks workspace. Ensure the following:
-	- Your conda environment ``mlops-workshop-local`` is activated.
-	- You completed the step to run [create_datasets.py](part_0.md#option-a-use-compute-instance-for-code-development).
+- Complete [Part 0](part_0.md) to set up the required resources and permissions in Azure. 
+
 
 ## Summary 
-Your team has been working on a new ML problem. The team has been performing exploratory work on data and algorithm and has come to a state that the solution direction is solidified. Now, it is a time to put a structure into the work so that the team can iterate faster toward building a fully functional solution.   
+Your team has been working on a new ML problem. The team has done initial exploratory work preparing the data and fitting models and has now come to a state that the solution direction is mostly solidified. Now, it is time to structure the work so that the team can systematically and quickly iterate towards an improved and deployable solution.   
 
-So far, team members have been working mostly independently on Jupyter notebooks in the Azure Databricks workspace that handle their end to end model development workflow. They want to move towards more effective collaboration for continuous improvement, and easier maintenance of the workflow as they move it from exploratory work to a production workflow. 
+So far, team members have been working mostly independently in Azure Databricks notebooks that handle their end-to-end model development workflow. To enable more effective collaboration for continuous improvement and easier maintenance of the workflow, they will benefit from breaking the workflow into separately maintainable but linked parts.
 
 As a first step towards MLOps, the team needs to accomplish the following:  
 
@@ -21,23 +20,27 @@ To illustrate how the process works, the monolithic notebook was refactored into
 
 ## Steps
 
-> Note: You can run following tasks in your Azure Databricks workspace. 
+> Note: You can review notebooks and run the following tasks in the Databricks Repo in your Azure Databricks workspace. 
 
-1. Familiarize yourself with the steps in this [Jupyter
-  notebook](../notebooks/mlflow-end-to-end-example.ipynb). The notebook shows the overall data engineering and model building
-  process. **There is no need to run this as part of this workshop.**
+0. Navigate to `Repos/{your Databricks user account}/MLOps-ado-adb/src/workshop/notebooks`.
+
+![Databricks Repo file explorer](part_1_db_repo_file_explorer.png)
+
+
+1. Familiarize yourself with the steps in the
+  notebook in the Databricks Repo at "/notebooks/mlflow-end-to-end-example.ipynb". The notebook shows the end-to-end data engineering and model building workflow in a single notebook. **There is no need to run this as part of this workshop.**
    
-2. Discuss in your team why a monolithic code structure is a challenge to a scalable and repeatable ML development process? 
-    > Note: Now observe how the monolithic notebook was refactored into a feature engineering module, a ML training module, and a model evaluation module so that they can be developed and run independently.
+2. Ask yourself, and discuss with your team, why putting the entire workflow into a single notebook is a challenge to scalable and repeatable ML development.
+    > Note: Now observe how the monolithic notebook was refactored into a data prep or feature engineering module, a model training module, and a model evaluation module so that each step in the overall process can be developed and run independently.
 
-3. Go to the workshop folder. [TODO: Change to direct user attention to where the data is in Databricks.]
-    > Action Items: Run the following code snippet.
-    ```bash 
-    cd src/workshop
-    ```
-    > Note: Review the ```workshop/data``` folder. There are data files that were created by the data generation process. The same data files were also sent to the  Azure Machine Learning Studio's default datastore under ```workspaceblobstore/mlops_workshop/data```.
+3. The basic version control and git branching strategy we'll use is as follows:
+- the `main` branch contains all the code used to develop the model in production 
+- the `integration` branch starts as a complete copy of `main`
+- data scientists create feature branches off of `integration` with names like `feature-dev-myname` to experiment with changes to some part of the workflow, in the hopes of finding an improvement in the models produced by the workflow
+- if results are promising, the work done in `feature-dev-myname` is merged into `integration`
+- if the new work results in a model that outperforms the production model in `main`, then the new code in `integration` becomes the new `main`, and the model is updated to reflect the new workflow.
 
-4. Using your Databricks repo, create your own development branch where you can make and track changes. This branch will be your development area to create and test new code or pipelines before committing or merging the code into a common branch, such as ```integration```.
+4. In your Databricks repo, create your own development branch off of the `integration` branch where you can make and track changes. This branch will be your development area to create and test new code or pipelines before committing or merging the code back into a common branch, such as ```integration```.
 
 [TODO: Adjust the following instructions.]
 
