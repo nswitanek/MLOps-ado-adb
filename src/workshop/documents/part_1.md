@@ -28,7 +28,7 @@ To illustrate how the process works, the monolithic notebook was refactored into
 
 
 1. Familiarize yourself with the steps in the
-  notebook in the Databricks Repo at "/notebooks/mlflow-end-to-end-example.ipynb". The notebook shows the end-to-end data engineering and model building workflow in a single notebook. **There is no need to run this as part of this workshop.**
+  notebook in the Databricks Repo at `/notebooks/mlflow-end-to-end-example.ipynb`. The notebook, developed by Databricks and available in the [Azure Databricks documentation](https://learn.microsoft.com/en-us/azure/databricks/mlflow/end-to-end-example), shows the end-to-end data preparation and model building workflow in a single notebook. **There is no need to run this as part of this workshop.**
    
 2. Ask yourself, and discuss with your team, why putting the entire workflow into a single notebook is a challenge to scalable and repeatable ML development.
     > Note: Now observe how the monolithic notebook was refactored into a data prep or feature engineering module, a model training module, and a model evaluation module so that each step in the overall process can be developed and run independently.
@@ -36,47 +36,40 @@ To illustrate how the process works, the monolithic notebook was refactored into
 3. The basic version control and git branching strategy we'll use is as follows:
 - the `main` branch contains all the code used to develop the model in production 
 - the `integration` branch starts as a complete copy of `main`
-- data scientists create feature branches off of `integration` with names like `feature-dev-myname` to experiment with changes to some part of the workflow, in the hopes of finding an improvement in the models produced by the workflow
-- if results are promising, the work done in `feature-dev-myname` is merged into `integration`
+- data scientists create feature branches off of `integration` with names like `dev-myname` to experiment with changes to some part of the workflow, in the hopes of finding an improvement in the models produced by the workflow
+- if results are promising, the work done in `dev-myname` is merged into `integration`
 - if the new work results in a model that outperforms the production model in `main`, then the new code in `integration` becomes the new `main`, and the model is updated to reflect the new workflow.
 
-4. In your Databricks repo, create your own development branch off of the `integration` branch where you can make and track changes. This branch will be your development area to create and test new code or pipelines before committing or merging the code back into a common branch, such as ```integration```.
+4. In your Databricks repo, create your own development branch off of the `integration` branch where you can make and track changes. This branch will be your development area to create and test new code or pipelines before committing or merging the code back into a common branch, such as `integration`.
 
-[TODO: Adjust the following instructions.]
+To do this, right-click the `/MLOps-ado-adb` folder in your Databricks Repos section of your Workspace, and select the "Git..." option from the drop-down menu.
 
-    - Run following command to create a new branch named "yourname-dev"
-        ```bash
-        git checkout -b yourname-dev
-        ```
-    - This will set the working branch to ```yourname-dev```. To check, run the following command:
-        ```bash
-        git branch
-        ```
+![Git options from Databricks Repo](part_1_git_options_from_adb_repo.png)
 
-5. Review the refactored data engineering logic in the notebook at ```part_1_data_prep.ipynb``` under the ```data_engineering``` folder [TODO: confirm that using the old folder structure makes sense.].
+In the next screen, make sure the `integration` branch is selected from the drop-down menu.
+![Databricks Repo branch UI with integration default](part_1_branch_ui_integration.png)
 
-[TODO: determine whether any of the following still hold and can be updated to databricks notebook]
+Select "Create Branch." In the next screen, type "dev-{yourname}" in the "Branch name" field and "Create" the branch based on "Branch: integration".
+![Databricks Repo create dev branch based on integration branch](part_1_adb_create_branch.png)
 
+After you've created the branch, close the branch window and confirm that `dev-{yourname}` appears in the filepath at the top of the Repos view in Azure Databrcks:
+![Databricks Repo file explorer with dev branch selected](image-8.png)
 
-    - The module performs the following:
-        - Accepts the following parameters: [TODO: parameterize the Databricks notebook / job, learn how to call the parameterized job -- start by calling it without parameters]
-            - ```input_folder```: path to a folder for input data. The value for local test run is ```data```
-            - ```prep_data```: path to a folder for output data. The value for local test run is ```data```
-            - ```public_holiday_file_name```: name of the public holiday file. The value for local test run is ```holidays.parquet``` 
-            - ```weather_file_name```: name of the weather raw file.It's ```weather.parquet``` 
-            - ```nyc_file_name```: name of the newyork taxi raw file. It's ```green_taxi.parquet``` 
-        - Performs data transformation, data merging and feature engineering logics 
-        - Splits the data into train and test sets where test_size is 20%
-        - Writes the output data files to output folder
-        > Action Item: Run the following code snippet. [TODO: easiest change to the instruction is to run the notebook from the Databricks UI; running it in a parameterized fashion would be better, will need to see an example in the docs]
-         ```bash 
-          python core/data_engineering/feature_engineering.py \
-	  --input_folder data \
-	  --prep_data data \
-	  --public_holiday_file_name holidays.parquet \
-	  --weather_file_name weather.parquet \
-	  --nyc_file_name green_taxi.parquet
-5. Review the refactored model training logic in the ```part_1_training.ipynb``` notebook under training folder. 
+While your dev branch is selected, you'll be looking at version-controlled copies of the files from the integration branch. 
+
+Next let's review those task-focused notebooks that were refactored from the end-to-end monolithic notebook.
+
+5. Review the refactored data preparation logic in the notebook at `/notebooks/part_1_data_prep.ipynb`.
+
+This modular notebook performs the following:
+
+- Loads the raw data from dbfs.
+- Checks for missing values.
+- Does some basic data visualizations.
+- Creates a new, binary outcome variable.
+- Saves the prepared data to dbfs.
+
+6. Review the refactored model training logic in the ```part_1_training.ipynb``` notebook under training folder. 
 
 [TODO: determine whether any of the following still hold and can be updated to databricks notebook]
 
