@@ -25,9 +25,13 @@ You may have noticed in Part 2 that the Azure Pipeline you worked with had "unit
 
 ## Steps
 1. First, let's review the Azure Pipeline YAML from Part 2 for what triggers the pipeline. In Azure DevOps, navigate to Azure Pipelines, click on the pipeline you triggered manually in Part 2, and click on the "Edit" button in the upper right. This will give you a way of viewing the pipeline YAML file. You can also navigate to this file in the Repos section of Azure DevOps, by clicking on Repos and into the /.azure_pipelines directory, then clicking on the workshop_unit_test.yml.
+
+[TODO: update this screenshot with current yml file]
 ![Azure Pipeline unit test triggers](part_3_unit_test_triggers.png)
 
-We can see in the YAML configuring the Azure Pipeline that there are `branches` and `paths` triggers. The `branches` triggers state that any code changes committed to a branch that is not ("exclude") the `main` or `integration` branch will trigger the pipeline. Recall that `integration` starts as a copy of main, and that any new data science or engineering work should be done on a branch that is made off of `integration`. In Part 1, you created a development branch in your Databricks Repo named something like `dev-{yourname}`. Next, the `paths` triggers tell Azure Pipelines to observe changes to a particular file path, in this case the path to the data prep notebook. 
+We can see in the YAML configuring the Azure Pipeline that there are `branches` and `paths` triggers. The `branches` triggers state that any code changes committed to a branch that is not ("exclude") the `main` or `integration` branch and is on ("include") your personal dev branch, will trigger the pipeline. We only need the "include" branch trigger condition in this case, but when you are out of the workshop, you'll commonly encounter the condition to unit test every code change not on main or integration. 
+
+Recall that `integration` starts as a copy of main, and that any new data science or engineering work should be done on a branch that is made off of `integration`. In Part 1, you created a development branch in your Databricks Repo named something like `dev-{yourname}`. Next, the `paths` triggers tell Azure Pipelines to observe changes to a particular file path, in this case the path to the data prep notebook. 
 
 This trigger configuration then has Azure Pipelines watching your data prep notebook on branches like your development branch, and will run this automated set of tests when you commit the changes you make to your notebook, just to make sure that the notebook still runs successfully. 
 > Note: One could incorporate other tests at this stage, but for simplicity in demonstrating the basic concept, we focus here only on the notebook running successfully.
@@ -35,7 +39,7 @@ This trigger configuration then has Azure Pipelines watching your data prep note
 
 2. Next, now that we know which committed changes to which notebooks on which git branches should trigger this Azure pipeline, let's see if changes we make to the data prep notebook actually do trigger the unit test pipeline. In Databricks, navigate to your Workspace > Repos and to the MLOps-ado-adb folder. Confirm that you are on your dev branch, likely named `dev-{yourname}`.
 
-In the Databricks Repo, open to `/notebooks/part_1_1_data_prep`. Make any minor change to the notebook. This can be a change simply to the markdown comments, or something in the code cells that won't stop the notebook from running from top to bottom. You can manually `Run all` to confirm that your changes don't cause the notebook to raise an exception before completing.
+In the Databricks Repo, open the `/notebooks/part_1_1_data_prep` Databricks notebook. Make any minor change to the notebook. This can be a change simply to the markdown comments, or something in the code cells that won't stop the notebook from running from top to bottom. You can manually `Run all` to confirm that your changes don't cause the notebook to raise an exception before completing.
 
 3. Changes you make in a Databricks notebook automatically save to the Workspace, but are not automatically reflected in the Azure Repo that the Databricks Repo is linked to. In order to sync the Databricks Repo with the Azure Repo, you need to execute two git actions, you need to `commit` the code changes and `push` the changes to the Azure repo. To do this from your Databricks Repo, you can click on the git icon with your branch name at the top of your Databricks notebook. In this example the branch is named `dev-{yourname}`:
 ![Databricks notebook link to repo](part_3_adb_repo_link_in_nb.png)
@@ -46,6 +50,8 @@ Next, you are in the Databricks Repo interface, where you must first enter a "Co
 Next, let's trace out the consequences of your code commit and push. 
 
 4. First, in Azure DevOps navigate to the Azure Repo and to the notebook file you changed to see that the changes you committed are reflected in the history of the file.
+
+[TODO: collect screenshot]
 
 ![Azure Repo - data prep notebook history]()
 
