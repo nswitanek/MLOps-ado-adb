@@ -58,9 +58,9 @@ steps:
     -H 'Authorization: Bearer '"$(token)"'' \
     -H 'Content-Type: application/json' \
     -d '{
+          "git_provider": "azureDevOpsServices",
           "personal_access_token": "'"$(token)"'",
-          "git_username": "$(sp_client_id)",
-          "git_provider": "azureDevOpsServices"
+          "git_username": "$(sp_client_id)"
         }' \
     $(databricks_workspace_uri)/api/2.0/git-credentials)
 
