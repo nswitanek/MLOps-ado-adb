@@ -36,8 +36,8 @@ To illustrate how the process works, the monolithic notebook was refactored into
 3. The basic version control and git branching strategy we'll use is as follows:
 - the `main` branch contains all the code used to develop the model in production 
 - the `integration` branch starts as a complete copy of `main`
-- data scientists create feature branches off of `integration` with names like `dev-myname` to experiment with changes to some part of the workflow, in the hopes of finding an improvement in the models produced by the workflow
-- if results are promising, the work done in `dev-myname` is merged into `integration`
+- data scientists create feature branches off of `integration` with names like `dev-{yourname}` to experiment with changes to some part of the workflow, in the hopes of finding an improvement in the models produced by the workflow
+- if results are promising, the work done in `dev-{yourname}` is merged into `integration`
 - if the new work results in a model that outperforms the production model in `main`, then the new code in `integration` becomes the new `main`, and the model is updated to reflect the new workflow.
 
 4. In your Databricks repo, create your own development branch off of the `integration` branch where you can make and track changes. This branch will be your development area to create and test new code or pipelines before committing or merging the code back into a common branch, such as `integration`.
