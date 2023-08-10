@@ -3,11 +3,12 @@
 
 ## Pre-requisites
 - Complete [Part 0](part_0.md), [Part 1](part_1.md)
+[TODO: make sure the following two bullets are confirmed in Part 0]
+- Have access to an Azure AD Service Principal
+- Have access to Azure DevOps
 - In your Databricks Repo, have personal dev branch off of the `integration` branch. 
 - Run each notebook successfully via the Databricks notebook UI -- data prep, training, and evaluating.
 - Confirm that you have a Model labeled "Production" in the Models section of Databricks
-- Have access to an Azure AD Service Principal
-- Have access to Azure DevOps
 
 ## Summary 
 After successfully restructuring the monolithic Databricks notebook into task-focused, modular notebooks, and running those notebooks via the Databricks UI, your team wants to prepare to run the notebooks automatically in response to code changes.
@@ -23,15 +24,22 @@ To introduce these concepts you will next do the following:
 
 ## Steps
 1. Many actions you take in Databricks, including running a notebook, can be triggered programmatically via API. Let's unpack an example call to the API to run a notebook:
+[TODO: update the screenshot, or use code block]
 ![Sample Databricks API to run job](part_2_run_job.png)
 
+
 In the first line we see `curl -X POST`, which means we're using a command-line utility, curl, to issue a request to a URL address.
-At the bottom we see where the request is sent, to `$(databricks_workspace_uri)/api/2.1/jobs/run-now`. The `$(databricks_workspace_uri)` part is a variable referring to the URI of your Databricks instance, which you can find in the address bar of your browser and is of the form "https://{some string}.azuredatabricks.net/". After that is the `/api/2.1/jobs/run-now`, which is how we express the command to run the notebook.
+At the bottom we see where the request is sent, to `$(databricks_workspace_uri)/api/2.1/jobs/run-now`. The `$(databricks_workspace_uri)` part is a variable referring to the URI of your Databricks instance, which corresponds to what you can find in the address bar of your browser and is of the form "https://{some string}.azuredatabricks.net/". The API call refers to the notebook to be run.
+Many variables used in this pipeline were specified in Part 0 as part of the platform setup, and they are in the Azure DevOps library as a variable group.
+
+[TODO: Incorporate steps to enable the notebooks, in which we had them manually add parameters during testing in Part 1, to also take parameters passed in the API call programmatically.]
+
+After that is the `/api/2.1/jobs/run-now`, which is how we express the command to run the notebook.
 
 2. Next, in order to run a notebook in Databricks you need to have the right permissions. This is what the `Authorization: Bearer '"$(token)"'` is about. Unless we pass the right token along with the API request, the request will be rejected and no action will be taken. From the `$(token)` notation, we see that the token is a variable. How do we get that token? Prior to making the Databricks API request, we're going to request the token for the Service Principal from the Azure AD API.
 
 ![Azure AD Login API](part_2_aad_login.png)
-With this REST call, we are asking Azure AD for an OAuth token for the Service Principal, referred to by its `client_id`. We are passing the `client_secret` for the Service Principal along with the request, and if the request is authorized, we'll get back a JSON message that will include the `access_token` as one of the elements of the JSON, which we use `jq` to parse and extract to the variable `token`. That `token` is what is referenced by `$(token)` in the call to the Databricks API. For security purposes, this token only lives for an hour, so each time we call the API, we'll first authenticate
+With this REST call, we are asking Azure AD for an OAuth token for the Service Principal, referred to by its `client_id`. We are passing the `client_secret` for the Service Principal along with the request, and if the request is authorized, we'll get back a JSON message that will include the `access_token` as one of the elements of the JSON, which we use `jq` to parse and extract to the variable `token`. That `token` is what is referenced by `$(token)` in the call to the Databricks API. For security purposes, this token only lives for an hour, so each time we call the API, we'll first have the Service Principal authenticate.
 
 3. We now know that running the notebook via the Databricks API requires first authenticating and getting a token that reflects the right permissions. We'd like these two steps to run on a secure machine in a pipeline that can be automated in response to certain events like code changes that have been saved and committed to our repo. Azure Pipelines is a platform enabling just such functionality. Here is an example Azure Pipeline definition:
 
@@ -54,19 +62,23 @@ Select your MLOps-ado-adb repo.
 Configure your pipeline using an "Existing Azure Pipelines YAML file":
 ![Pipelines configure step](part_2_ado_pipe3.png)
 
-Select the `.azure_pipelines/workshop_unit_test.yml` Azure Pipeliens YAML file in your branch of the repo.
+Select the `.azure_pipelines/workshop_unit_test.yml` Azure Pipelines YAML file in your branch of the repo.
+
+[TODO: screenshot should not show main]
 ![Pipelines select yaml step](part_2_ado_pipe4.png)
 
 Give your pipeline a Pipeline Name of "data-prep-unit-test-{yourname}", the click the "Save and run" button to manually trigger the pipeline.
 ![Pipelines review step](part_2_ado_pipe5.png)
 
-5. Let's review what happens next. Click on the "Job" link to open up the Azure Pipeline job.
+[TODO: revise branches trigger to add an include path and have the user edit the include to point to their dev branch -- otherwise all dev branches will trigger all workshop participants' pipelines]
+
+5. Let's review what happens next. Click on the "Job" link to open up the Azure Pipeline job you just saved and ran.
 ![Azure Pipeline Job](part_2_pipe_job.png)
 
 You'll see a long list of steps that have run on the Linux VM in Azure pipelines. All steps in the Azure Pipeline should show a green checkmark as having successfully completed. Many of the steps are utility steps, but they also include the two steps we explicitly defined in the pipeline YAML, namely the authorization step, labeled "Get Entra ID token" -- Entra is the new brand name for Azure AD --, and the run notebook step, labeled "Run Databricks notebook via API". Click on "Run Databricks notebook via API".
 ![Azure Pipeline Job - Databricks API step](part_2_pipe_adb_step.png)
 
-6. Finally, let's confirm that the command we issued to our Databricks workspace from the Azure Pipeline actually triggered the Databricks notebook to run. In your browser, return to Azure Databricks.
+6. Finally, let's confirm that the command we issued to our Databricks workspace from the Azure Pipeline actually triggered the Databricks notebook to run. In your browser, return to Azure Databricks and navigate to Workflows > Job runs. You should see a job with name "Data Prep Pipeline Run - {your branch name}" that was run as your Service Principal.
 
 [TODO: find run triggered via Azure Pipeline and include screenshot]
 
