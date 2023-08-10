@@ -1,0 +1,138 @@
+# Azure DevOps Pipeline to Run a Databricks Job
+# This uses bash scripts to invoke the Databricks API and start a job.
+# First we use the service principal's credentials to get a token from Entra
+# Then we use that token to make an HTTP call to the Databricks API
+
+# This pipeline expects the following variables:
+# - tenant_id:  The ID of your Entra tenant (should be a guid)
+# - sp_client_id:  The service principal's client ID (should be a guid)
+# - sp_credential:  The service principal's crdential (should be marked as a secret)
+# - databricks_workspace_uri:  The URI for the Databricks workspace (without the trailing slash)
+
+trigger:
+  branches:
+    exclude:
+      - main
+      - integration
+  paths:
+    include:
+      - src/workshop/notebooks/part_1_1_data_prep.ipynb
+      - src/workshop/notebooks/test_params.py
+      - .azure_pipelines/workshop_unit_test.yml
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  BRANCH_NAME: $[replace(variables['Build.SourceBranch'], 'refs/heads/', '')]
+
+steps:
+- script: |
+    token=$(curl -s -X POST -H 'Content-Type: application/x-www-form-urlencoded' \
+    https://login.microsoftonline.com/$(tenant_id)/oauth2/v2.0/token \
+    -d 'client_id=$(sp_client_id)' \
+    -d 'grant_type=client_credentials' \
+    -d 'scope=2ff814a6-3304-4ab8-85cb-cd0e6f879c1d%2F.default' \
+    -d 'client_secret='"$SP_CREDENTIAL"'' \
+    | jq -r '.access_token')
+
+    echo "##vso[task.setvariable variable=token;issecret=true]$token"
+
+  displayName: 'Get Entra ID token'
+  env:
+    SP_CREDENTIAL: $(sp_credential)
+
+- script: |
+    result=$(curl -s -X GET \
+    -H 'Authorization: Bearer '"$(token)"'' \
+    $(databricks_workspace_uri)/api/2.0/git-credentials)
+
+    for cred in $(echo "${result}" | jq -c '.credentials[] | {credential_id}'); do
+      cred_id=$(echo $cred | jq -r .credential_id)
+      del_result=$(curl -s -X DELETE \
+      -H 'Authorization: Bearer '"$(token)"'' \
+      $(databricks_workspace_uri)/api/2.0/git-credentials/${cred_id})
+    done
+
+    result=$(curl -s -X POST \
+    -H 'Authorization: Bearer '"$(token)"'' \
+    -H 'Content-Type: application/json' \
+    -d '{
+          "personal_access_token": "'"$(token)"'",
+          "git_username": "$(sp_client_id)",
+          "git_provider": "azureDevOpsServices"
+        }' \
+    $(databricks_workspace_uri)/api/2.0/git-credentials)
+
+    echo $result
+
+  displayName: 'Refresh Git Credentials'
+
+- script: |
+    cluster_def='{
+            "spark_version": "12.2.x-scala2.12",
+            "spark_conf": {
+                "spark.databricks.delta.preview.enabled": "true",
+                "spark.master": "local[*, 4]",
+                "spark.databricks.cluster.profile": "singleNode"
+            },
+            "azure_attributes": {
+                "first_on_demand": 1,
+                "availability": "ON_DEMAND_AZURE",
+                "spot_bid_max_price": -1
+            },
+            "node_type_id": "Standard_D4a_v4",
+            "driver_node_type_id": "Standard_D4a_v4",
+            "custom_tags": {
+                "ResourceClass": "SingleNode"
+            },
+            "spark_env_vars": {
+                "PYSPARK_PYTHON": "/databricks/python3/bin/python3"
+            },
+            "enable_elastic_disk": true,
+            "data_security_mode": "LEGACY_SINGLE_USER_STANDARD",
+            "runtime_engine": "STANDARD",
+            "num_workers": 0
+          }'
+
+    result=$(curl -s -X POST \
+    -H 'Authorization: Bearer '"$(token)"'' \
+    -H 'Content-Type: application/json' \
+    -d '{
+      "run_name": "CI/CD Data Prep",
+      "tasks": [
+        {
+          "task_key": "data_prep",
+          "notebook_task": {
+            "notebook_path": "src/workshop/notebooks/test_params.py",
+            "source": "GIT",
+            "base_parameters": {
+              "data_location": "this is where we put a value"
+            }
+          },
+          "new_cluster": '"$cluster_def"'
+        },
+        {
+          "task_key": "data_prep_2",
+          "notebook_task": {
+            "notebook_path": "src/workshop/notebooks/test_params.py",
+            "source": "GIT",
+            "base_parameters": {
+              "data_location": "run it again"
+            }
+          },
+          "depends_on": [ {"task_key": "data_prep"} ],
+          "new_cluster": '"$cluster_def"'
+        }
+      ],
+      "git_source": {
+        "git_provider": "azureDevOpsServices",
+        "git_url": "'"$(System.CollectionUri)$(System.TeamProject)"'",
+        "git_branch": "'"$(BRANCH_NAME)"'"
+      }
+    }' \
+    $(databricks_workspace_uri)/api/2.1/jobs/runs/submit)
+
+    echo $result
+
+  displayName: 'Run Databricks notebook via API'
