@@ -30,7 +30,7 @@ To illustrate how the process works, the monolithic notebook was refactored into
 1. Familiarize yourself with the steps in the
   notebook in the Databricks Repo at `/notebooks/mlflow-end-to-end-example.ipynb`. The notebook, available in the [Azure Databricks documentation](https://learn.microsoft.com/en-us/azure/databricks/mlflow/end-to-end-example), shows the end-to-end data preparation and model building workflow in a single notebook. 
   
-  **There is no need to run this as part of this workshop.**
+  **There is no need to run this end-to-end notebook as part of this workshop.**
    
 2. Ask yourself, and discuss with your team, why putting the entire workflow into a single notebook is a challenge to scalable and repeatable ML development.
 
@@ -74,7 +74,7 @@ This modular notebook focused on data prep does the following:
 - Creates a new, binary outcome variable.
 - Saves the prepared data to dbfs.
 
-Change the parameters at the top of the notebook.
+At the top of the notebook, you'll see comments indicating where to change some parameters regarding the path to where you write the prepared dataset. We do this in the context of the workshop so you aren't overwriting the datasets created by other workshop participants.
 [TODO: update the notebook to require parameters at the top]
 
 Run this notebook.
@@ -88,7 +88,7 @@ This modular notebook focused on model training does the following:
 - Builds a baseline model and 
 - Registers the model to the Model Registry and labels it as "Staging"
 
-Change the parameters at the top of the notebook.
+Change the parameters at the top of the notebook to read the dataset from where you write it in the data prep notebook, and to establish a mlflow model path specific to you. 
 [TODO: update the notebook to require parameters at the top]
 
 Run this notebook.
@@ -101,14 +101,14 @@ This modular notebook focused on model evaluation does the following:
 - Load the model registered to staging in the training step.
 - Use the trained model to predict on the test data and generate model evaluation metrics.
 - If no prior trained model exists, the model will be registered as a baseline model in production.
-- If a production model is found, the evaluation metrics for that model will be compared against the newly trained model and if they surpass production, model will be registered to production. If they do not, the notebook exits and raises an exception.
+- If a production model is found, the evaluation metrics for that model will be compared against metrics for the newly trained model and if the new model's metrics surpass those of the current production model, the new model will be registered to production. If not, the notebook exits and raises an exception. 
 
-Change the parameters at the top of the notebook.
+Change the parameters at the top of the evaluation notebook to read the model from the path in the mlflow model registry where you saved it in the training notebook, and reads the test data from your path to the data that you established in the data prep notebook.
 [TODO: update the notebook to require parameters at the top]
 
 Run this notebook.
 
-8. Navigate to the Models section of Azure Databricks to see that a model is produced with name "wine_quality" and labeled as Production. This will be our baseline model that future iterative development of parts of the ML workflow will aim to beat.
+8. Navigate to the Models section of Azure Databricks to see that a model is produced with name "wine_quality_{yourname}" and labeled as Production. This will be your baseline model that your uture iterative development of parts of the ML workflow will aim to beat.
 
 ![Databricks Registered Models View](part_1_model_registry.png)
 
@@ -121,6 +121,7 @@ Run this notebook.
 ## Reference materials
 - [Databricks Repos]()
 - [Parameterizing Databricks Jobs]()
+- [Databricks Model Registry]()
 
 ## [Go to Part 2](part_2.md)
 
