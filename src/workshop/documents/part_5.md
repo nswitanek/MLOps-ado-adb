@@ -7,14 +7,14 @@
 
 After a successful run of the CI (continuous integration) pipeline, your team is looking to complete the process with a CD (continuous delivery, or continuous deployment) pipeline that will handle the deployment of the new, better-performing model while maintaining continuous delivery of the model to processes that depend on the model's availability, without introducing any downtime in production, also known as a "hot swap".
 
-The goal of this section is to get a fully functional CD pipeline that will:
+The goal of this section is to get a fully functional CD pipeline running that will:
     
-1. Trigger based on creation of a Pull Request (PR) to main.
-2. Login to Azure using a Service Principal to be able to leverage the Azure Databricks commands in your workflow.
+1. Authenticates using a Service Principal to be able to leverage the Azure Databricks commands in your workflow.
+2. Be automatically triggered based on a Pull Request (PR) that is approved to merge the new code that passes the integration tests in the `integration` branch into the main branch of the repo.
 3. If the model performance metrics show improvement over the current production model, then promote the new model to production and demote the old to staging.
-    - Test the deployment of the new model.
-    - On success of test, swap the deployment to accept 100% of the service endpoint traffic (and therefore become 'production').
-4. Add a Branch Protection rule in Azure DevOps.
+4. Confirm that a Branch Protection rule is established in Azure DevOps to ensure that changes to `main` meet certain predefined criteria.
+
+Finally, we will test the new model with sample production data.
 
 ## Steps
 
@@ -42,7 +42,7 @@ The goal of this section is to get a fully functional CD pipeline that will:
         - `/core/scoring/deployment.yml`: this defines an actual deployment to an endpoint. 
 
     You can have as many deployments as you want behind an endpoint. The endpoint traffic routing enables you to control which parts of the traffic to the endpoint gets routed to which deployment. In this workshop, we take the blue/green approach where we'll have 2 deployments (named green and blue respectively), which will take turn playing the role of production/staging. We only have one deployment file define though, as we automatically override the name of the deployment as part of a custom GitHub action which we'll review later in this section.
-
+    
     > Action Items:
     > 1. Edit `endpoint.yml` file to setup the name of your endpoint. This name needs to be unique within the region you are deploying into as the endpoint name is part of the endpoint URI. Look for #setup in that file.
     > 2. Edit `deployment.yml` to setup the name of the endpoint this deployment belongs to to the same name you defined just above. Look for #setup in that file.
