@@ -71,11 +71,6 @@ steps:
   displayName: 'Refresh Git Credentials'
 
 - script: |
-    git pull "$(System.CollectionUri)$(System.TeamProject)".git
-  
-  displayName: attempt to pull from git
-
-- script: |
     cluster_def='{
             "spark_version": "12.2.x-scala2.12",
             "spark_conf": {
