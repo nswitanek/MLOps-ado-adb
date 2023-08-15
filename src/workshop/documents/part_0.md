@@ -24,10 +24,6 @@ The steps described here in Part 0 prepare Azure Databricks, Azure DevOps, and a
 6. [Generate and store data.](#6-generate-and-store-data)
 
 
-> Note: For a detailed video walk-through of the process, click on the video below to walk through Steps 0 to 3.
-> [![VideoGuide](./images/video_img.png)](https://youtu.be/k9ExpebwR18)
-
-
 ## 1. Create an Azure AD Service Principal
 
 > NOTE: You can skip this section if you've been provided an Azure AD Service Principal.
@@ -52,7 +48,6 @@ The steps described here in Part 0 prepare Azure Databricks, Azure DevOps, and a
 ## 3. Generate an Azure AD token for the Service Principal
 
 [TODO: replace the actions here with revised instructions]
-
 
 
 ```bash

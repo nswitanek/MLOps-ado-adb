@@ -7,6 +7,11 @@
 After successfully using Azure Pipelines to automate unit testing of changes made to an individual notebook that represents a step in the overall model development workflow, your team wants to test that the changed notebook also integrates with the overall workflow. Continuous Integration (CI) is the process of developing, testing, integrating, and evaluating new features in a staging environment, as a way of confirming they are ready for deployment and release. 
 
 
+The overall CI/CD Workflow is shown below. In this part, we focus on running the CI Workflow.
+
+[TODO: replace image with one using ADB instead of AML]
+![pipeline](images/part3cicd.png)
+
 
 ## Steps:
 1. The notebook that was unit tested in Part 3 is also part of an overall end to end workflow. Navigate to Databricks Workflows and find the `training_workflow` among the Workflow jobs listed. 

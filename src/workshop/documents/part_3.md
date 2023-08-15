@@ -7,12 +7,12 @@
 ## Summary
 Although there are a variety of ways to implement MLOps, the aim is to have a balance between a controlled, secured operational environment that delivers predictions or other services from ML models --this is the "Ops" in MLOps--, together with a way of integrating the innovations and improvements made by data scientists and engineers in the "ML" workflow. 
 
-Version-controlled code that generates the model that is delivering predictions in production needs to be maintained no matter what, so any potential improvements that the data science and engineering teams make cannot disrupt the delivery of predictions. To prevent disruptions and to enable continuous delivery, it's common to require new ideas, committed to code, to pass through several stages of review before replacing parts of what was already in production. 
+Version-controlled code that generates the model that is delivering predictions in production needs to be maintained no matter what, so any potential improvements that the data science and engineering teams make cannot disrupt the delivery of predictions. To prevent disruptions and to enable continuous delivery, it's common to require new ideas, committed to code, to pass through several stages of review before replacing parts of what was already in production.
 
 The basic stages that we'll introduce in this workshop are the following:
-- "Unit test": does a notebook that has been changed still run successfully on its own?
-- Integration testing: if a notebook has changed, does the overall workflow, composed of several notebooks, still run successfully?
-- Model evaluation: if the overall workflow runs successfully, it produces a model, so does that model outperform the model already in production?
+- "Unit test": Does a notebook that has been changed still run successfully on its own?
+- Integration testing: If a notebook has changed, does the overall workflow, composed of several notebooks, still run successfully?
+- Model evaluation: If the overall workflow runs successfully, it produces a model, so does that model outperform the model already in production?
 
 Because we want these stages to be required whenever someone proposes changing an element of the existing workflow, and because each stage has several steps that must be performed consistently every time, we make use of an automation tool, Azure Pipelines. 
 
@@ -20,11 +20,11 @@ We want certain steps to be taken every time changes are made to different parts
 
 In this part, we focus on the "unit test."
 
-You may have noticed in Part 2 that the Azure Pipeline you worked with had "unit test" in the YAML file name. We're putting "unit test" in quotes here, because it's not precisely what a software engineer would call a unit test, but the basic idea is that we want to assess whether a small but meaningful component of the code works as expected on its own, before we move on to trying to integrate it with everything else.
+You may have noticed in Part 2 that the Azure Pipeline you worked with had "unit_test" in the YAML file name. We're putting "unit test" in quotes here, because it's not precisely what a software engineer would call a unit test, but the basic idea is similar: we want to assess whether a small but meaningful component of the code works as expected on its own, before we move on to trying to integrate it with everything else.
 
 
 ## Steps
-1. First, let's review the Azure Pipeline YAML from Part 2 for what triggers the pipeline. In Azure DevOps, navigate to Azure Pipelines, click on the pipeline you triggered manually in Part 2, and click on the "Edit" button in the upper right. This will give you a way of viewing the pipeline YAML file. You can also navigate to this file in the Repos section of Azure DevOps, by clicking on Repos and into the /.azure_pipelines directory, then clicking on the workshop_unit_test.yml.
+1. First, let's review the Azure Pipeline YAML from Part 2 for what triggers the pipeline. In Azure DevOps, navigate to Azure Pipelines, click on the pipeline you triggered manually in Part 2, and click on the "Edit" button in the upper right. This will give you a way of viewing the pipeline YAML file. You can also navigate to this file in the Repos section of Azure DevOps, by clicking on Repos and into the `/.azure_pipelines directory`, then clicking on the `workshop_unit_test.yml`.
 
 [TODO: update this screenshot with current yml file]
 ![Azure Pipeline unit test triggers](part_3_unit_test_triggers.png)
@@ -37,7 +37,7 @@ This trigger configuration then has Azure Pipelines watching your data prep note
 > Note: One could incorporate other tests at this stage, but for simplicity in demonstrating the basic concept, we focus here only on the notebook running successfully.
 
 
-2. Next, now that we know which committed changes to which notebooks on which git branches should trigger this Azure pipeline, let's see if changes we make to the data prep notebook actually do trigger the unit test pipeline. In Databricks, navigate to your Workspace > Repos and to the MLOps-ado-adb folder. Confirm that you are on your dev branch, likely named `dev-{yourname}`.
+2. Next, now that we know which committed changes to which notebooks on which git branches should trigger this Azure pipeline, let's see if changes we make and commit to the data prep notebook actually do trigger the unit test pipeline. In Databricks, navigate to your Workspace > Repos and to the MLOps-ado-adb folder. Confirm that you are on your dev branch, likely named `dev-{yourname}`.
 
 In the Databricks Repo, open the `/notebooks/part_1_1_data_prep` Databricks notebook. Make any minor change to the notebook. This can be a change simply to the markdown comments, or something in the code cells that won't stop the notebook from running from top to bottom. You can manually `Run all` to confirm that your changes don't cause the notebook to raise an exception before completing.
 
@@ -55,7 +55,7 @@ Next, let's trace out the consequences of your code commit and push.
 
 ![Azure Repo - data prep notebook history]()
 
-5. Next, the Azure Pipeline trigger conditions that we reviewed in step 1 seem to be satisfied by the changes we just committed to the Azure Repo: we changed the file on the watched path in a branch that is neither `main` nor `integration`. So did we trigger the Azure Pipeline? In Azure DevOps, navigate to your Pipelines. In the "Recently run pipelines" list, can you find the relevant pipeline "data-prep-unit-test-{yourname}" and does the "Last run" correspond to your commit and push?
+5. Next, the Azure Pipeline trigger conditions that we reviewed in step 1 seem to be satisfied by the changes we just committed to the Azure Repo: We changed the file on the watched path in a branch that is neither `main` nor `integration`. So did we trigger the Azure Pipeline? In Azure DevOps, navigate to your Pipelines. In the "Recently run pipelines" list, can you find the relevant pipeline "data-prep-unit-test-{yourname}" and does the "Last run" correspond to your commit and push?
 
 Importantly, did the pipeline successfully run to completion? There will be a solid green circle with a checkmark in it if it did.
 
@@ -69,7 +69,7 @@ The "unit test" described here is a basic introduction to how all the key pieces
 - An Azure Pipeline in Azure DevOps is configured to watch for file changes in certain branches, and an automated set of steps are triggered by the commit to the Azure Repo
 - The Azure Pipeline authenticates the Azure Service Principal and enables the Service Principal to run the notebook via the Databricks API
 
-If the unit test Azure Pipeline runs successfully, then we think the code changes in the one notebook are ready to be tested in the context of the full workflow consisting of multiple Databricks notebooks. Testing in the context of the full workflow is known as integration testing, and is the focus of Part 4.
+If the unit test Azure Pipeline runs successfully, then we expect the code changes in the one notebook are ready to be tested in the context of the full workflow consisting of multiple Databricks notebooks. Testing in the context of the full workflow is known as integration testing, and is the focus of Part 4.
 
 The overall CI/CD Workflow is shown below. We focused in this part on "Run Unit Test".
 
