@@ -122,7 +122,7 @@ steps:
       ],
       "git_source": {
         "git_provider": "azureDevOpsServices",
-        "git_url": "'"$(System.CollectionUri)$(System.TeamProject)".git'",
+        "git_url": "https://dev.azure.com/onemtc/MTC_MLOps/_git/MTC_MLOps",
         "git_branch": "'"$(BRANCH_NAME)"'"
       }
     }' \
