@@ -99,29 +99,17 @@ steps:
     -H 'Authorization: Bearer '"$(token)"'' \
     -H 'Content-Type: application/json' \
     -d '{
-      "run_name": "CI/CD Data Prep",
+      "run_name": "Data Prep Unit Test Pipeline",
       "tasks": [
         {
           "task_key": "data_prep",
           "notebook_task": {
-            "notebook_path": "src/workshop/notebooks/test_params.py",
-            "source": "GIT",
-            "base_parameters": {
-              "data_location": "this is where we put a value"
-            }
-          },
-          "new_cluster": '"$cluster_def"'
-        },
-        {
-          "task_key": "data_prep_2",
-          "notebook_task": {
-            "notebook_path": "src/workshop/notebooks/test_params.py",
+            "notebook_path": "src/workshop/notebooks/part_1_1_data_prep.ipynb",
             "source": "GIT",
             "base_parameters": {
               "data_location": "run it again"
             }
           },
-          "depends_on": [ {"task_key": "data_prep"} ],
           "new_cluster": '"$cluster_def"'
         }
       ],
