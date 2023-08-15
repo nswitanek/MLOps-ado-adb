@@ -29,9 +29,6 @@ The steps described here in Part 0 prepare Azure Databricks, Azure DevOps, and a
 > NOTE: You can skip this section if you've been provided an Azure AD Service Principal.
 
 
-
-> IMPORTANT: If this deployment fails, you cannot do the following steps in the workshop. Please inform your CSA or lab instructor with the error message.
-
 ## 2. Add the Service Principal to your Azure Databricks workspace
 
 [TODO: replace the actions here with revised instructions]
