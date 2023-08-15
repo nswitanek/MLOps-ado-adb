@@ -24,8 +24,9 @@ pool:
   vmImage: ubuntu-latest
 
 variables:
-  BRANCH_NAME: $[replace(variables['Build.SourceBranch'], 'refs/heads/', '')]
   - group: mlops-ado-adb-variables
+  - name: BRANCH_NAME
+    value: $[replace(variables['Build.SourceBranch'], 'refs/heads/', '')]
 
 steps:
 - script: |
@@ -49,6 +50,8 @@ steps:
     $(databricks_workspace_uri)/api/2.0/git-credentials)
 
     for cred in $(echo "${result}" | jq -c '.credentials[] | {credential_id}'); do
+      echo "Deleting credentials"
+      echo $cred
       cred_id=$(echo $cred | jq -r .credential_id)
       del_result=$(curl -s -X DELETE \
       -H 'Authorization: Bearer '"$(token)"'' \
@@ -59,9 +62,9 @@ steps:
     -H 'Authorization: Bearer '"$(token)"'' \
     -H 'Content-Type: application/json' \
     -d '{
-          "git_provider": "azureDevOpsServices",
-          "personal_access_token": "'"$(token)"'",
-          "git_username": "$(sp_client_id)"
+          "git_provider": "AzureDevOpsServices",
+          "personal_access_token": "$(ado_username_pat)",
+          "git_username": "$(ado_username)"
         }' \
     $(databricks_workspace_uri)/api/2.0/git-credentials)
 
@@ -105,7 +108,7 @@ steps:
         {
           "task_key": "data_prep",
           "notebook_task": {
-            "notebook_path": "src/workshop/notebooks/part_1_1_data_prep.ipynb",
+            "notebook_path": "src/workshop/notebooks/part_1_1_data_prep",
             "source": "GIT",
             "base_parameters": {
               "data_location": "run it again"
@@ -116,11 +119,13 @@ steps:
       ],
       "git_source": {
         "git_provider": "azureDevOpsServices",
-        "git_url": "'"$(System.CollectionUri)$(System.TeamProject)"'",
+        "git_url": "'"$(System.CollectionUri)$(System.TeamProject)"/_git/"$(System.TeamProject)"'",
         "git_branch": "'"$(BRANCH_NAME)"'"
       }
     }' \
     $(databricks_workspace_uri)/api/2.1/jobs/runs/submit)
+
+    echo "'"$(System.CollectionUri)$(System.TeamProject)"/_git/"$(System.TeamProject)"'"
 
     echo $result
 
