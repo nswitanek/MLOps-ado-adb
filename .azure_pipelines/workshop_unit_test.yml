@@ -123,6 +123,8 @@ steps:
     }' \
     $(databricks_workspace_uri)/api/2.1/jobs/runs/submit)
 
+    echo "'"$(System.CollectionUri)$(System.TeamProject)"'.git"
+
     echo $result
 
   displayName: 'Run Databricks notebook via API'
