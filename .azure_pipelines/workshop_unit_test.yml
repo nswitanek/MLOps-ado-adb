@@ -117,7 +117,7 @@ steps:
       ],
       "git_source": {
         "git_provider": "azureDevOpsServices",
-        "git_url": "'"$(System.CollectionUri)$(System.TeamProject)"'",
+        "git_url": "'"$(System.CollectionUri)$(System.TeamProject)"'.git",
         "git_branch": "'"$(BRANCH_NAME)"'"
       }
     }' \
