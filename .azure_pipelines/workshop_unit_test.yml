@@ -50,6 +50,8 @@ steps:
     $(databricks_workspace_uri)/api/2.0/git-credentials)
 
     for cred in $(echo "${result}" | jq -c '.credentials[] | {credential_id}'); do
+      echo "Deleting credentials"
+      echo $cred
       cred_id=$(echo $cred | jq -r .credential_id)
       del_result=$(curl -s -X DELETE \
       -H 'Authorization: Bearer '"$(token)"'' \
