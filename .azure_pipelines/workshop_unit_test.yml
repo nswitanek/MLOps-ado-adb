@@ -119,7 +119,7 @@ steps:
             "notebook_path": "src/workshop/notebooks/part_1_1_data_prep",
             "source": "GIT",
             "base_parameters": {
-              "run_name": "'"$(run_name)"'"
+              "run_name": "${{ parameters.run_name }}"
             }
           },
           "new_cluster": '"$cluster_def"'
