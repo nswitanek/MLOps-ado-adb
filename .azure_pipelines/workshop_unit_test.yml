@@ -6,8 +6,10 @@
 # This pipeline expects the following variables:
 # - tenant_id:  The ID of your Entra tenant (should be a guid)
 # - sp_client_id:  The service principal's client ID (should be a guid)
-# - sp_credential:  The service principal's crdential (should be marked as a secret)
+# - sp_credential:  The service principal's credential (should be marked as a secret)
 # - databricks_workspace_uri:  The URI for the Databricks workspace (without the trailing slash)
+# - ado_username: username for Azure DevOps with repo access to share with service principal
+# - ado_username_pat: ADO personal_access_token for username
 
 trigger:
   branches:
