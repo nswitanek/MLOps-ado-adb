@@ -29,7 +29,7 @@ pool:
 
 variables:
   - group: mlops-ado-adb-variables
-  - name: BRANCH_NAME
+  - name: BRANCH_NAME 
     value: $[replace(variables['Build.SourceBranch'], 'refs/heads/', '')]
 
 steps:
@@ -131,7 +131,20 @@ steps:
           },
           "depends_on": [ {"task_key": "data_prep"} ],
           "new_cluster": '"$cluster_def"'
+        },
+        {
+          "task_key": "model_evaluation",
+          "notebook_task": {
+            "notebook_path": "src/workshop/notebooks/part_1_3_evaluating",
+            "source": "GIT",
+            "base_parameters": {
+              "data_location": "run it again"
+            }
+          },
+          "depends_on": [ {"task_key": "model_training"} ],
+          "new_cluster": '"$cluster_def"'
         }
+      
       ],
       "git_source": {
         "git_provider": "azureDevOpsServices",
