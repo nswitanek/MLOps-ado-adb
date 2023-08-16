@@ -119,13 +119,13 @@ steps:
       ],
       "git_source": {
         "git_provider": "azureDevOpsServices",
-        "git_url": "'"$(System.CollectionUri)$(System.TeamProject)"/_git/"$(System.TeamProject)"'",
+        "git_url": "'"$(System.CollectionUri)$(System.TeamProject)"/_git/"$(Build.Repository.Name)"'",
         "git_branch": "'"$(BRANCH_NAME)"'"
       }
     }' \
     $(databricks_workspace_uri)/api/2.1/jobs/runs/submit)
 
-    echo "'"$(System.CollectionUri)$(System.TeamProject)"/_git/"$(System.TeamProject)"'"
+    echo "'"$(System.CollectionUri)$(System.TeamProject)"/_git/"$(Build.Repository.Name)"'"
 
     echo $result
 
