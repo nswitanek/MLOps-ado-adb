@@ -76,7 +76,7 @@ steps:
 
 - script: |
     cluster_def='{
-            "spark_version": "12.2.x-scala2.12",
+            "spark_version": "13.2.x-cpu-ml-scala2.12",
             "spark_conf": {
                 "spark.databricks.delta.preview.enabled": "true",
                 "spark.master": "local[*, 4]",
@@ -105,7 +105,7 @@ steps:
     -H 'Authorization: Bearer '"$(token)"'' \
     -H 'Content-Type: application/json' \
     -d '{
-      "run_name": "Data Prep Unit Test Pipeline",
+      "run_name": "Data Prep Unit Test Pipeline - '"$(BRANCH_NAME)"'",
       "tasks": [
         {
           "task_key": "data_prep",
