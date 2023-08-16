@@ -11,6 +11,12 @@
 # - ado_username: username for Azure DevOps with repo access to share with service principal
 # - ado_username_pat: ADO personal_access_token for username
 
+parameters:
+- name: run_name
+  displayName: Your Name
+  type: string
+  default: Otto
+
 trigger:
   branches:
     exclude:
@@ -113,7 +119,7 @@ steps:
             "notebook_path": "src/workshop/notebooks/part_1_1_data_prep",
             "source": "GIT",
             "base_parameters": {
-              "data_location": "run it again"
+              "run_name": "$(run_name)"
             }
           },
           "new_cluster": '"$cluster_def"'
