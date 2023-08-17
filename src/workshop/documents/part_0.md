@@ -15,151 +15,67 @@ The steps described here in Part 0 prepare Azure Databricks, Azure DevOps, and a
 
 ## Steps
 
-1. [Create a Service Principal in Azure Active Directory](#1-Create-a-Service-Principal-in-Azure-Active-Directory).
-2. [Add the Service Principal to your Azure Databricks workspace](#2-Add-the-Service-Principal-to-your-Azure-Databricks-workspace).
-3. [Add the Service Principal to Azure DevOps](#3-Add-the-Service-Principal-to-Azure-DevOps).
-4. [Create variable group in Azure DevOps](#4-set-up-azure-repo-account).
-5. [Register Azure Pipelines](#5-set-up-azure-devops).
-6. [Grant data scientists Azure DevOps permissions and user access](#6-generate-and-store-data).
-7. [Generate and store data](#7-generate-and-store-data).
+1. Create a Service Principal in Azure Active Directory
+2. Add the Service Principal to your Azure Databricks workspace
+3. Add the Service Principal to Azure DevOps
+4. Create a variable group in Azure DevOps
+5. Register Azure Pipelines
+6. Grant workshop participants Azure DevOps permissions and user access
+7. Generate and store data
 
 
-## 1. Create an Azure AD Service Principal
+## 1. Create a Service Principal in Azure Active Directory
 
 > NOTE: You can skip this section if you've been provided an Azure AD Service Principal.
 
 
 ## 2. Add the Service Principal to your Azure Databricks workspace
 
-[TODO: replace the actions here with revised instructions]
+![Databricks Admin Console > Add service principal](part_0_adb_add_sp.png)
 
-- 2.1 From the new browser tab, go to [Github](https://github.com/) and login to your account.
-    > Note: If you don't have an account for Github, please sign up. The workshop can't be done without a Github account.
-
-- 2.2 After the login, go to [https://github.com/microsoft/MLOpsTemplate](https://github.com/microsoft/MLOpsTemplate) and click `Fork`.
-    ![](./images/run_mlopsworkshop_azcli009.png)
-
-    > Note: You will have the same repository (`MLOpsTemplate`) under your Github account name.
-    > Leave the tab open and **do not** close it yet. You will come back to your repository.
 
 ## 3. Add the Service Principal to Azure DevOps
 
-[TODO: replace the actions here with revised instructions]
+![Azure DevOps > Project Settings > Teams > Add service principal](part_0_ado_add_sp.png)
 
 
-```bash
-git config --global credential.helper store
-```
+## 4. Create a variable group in Azure DevOps
+
+![Alt text](image-9.png)
+
+Grant open access to pipelines? Or maybe just to the pipelines that are registered.
+![Alt text](image-10.png)
 
 
+### 4.1 Choose ADO "utility" user and create PAT (Personal Access Token)
+
+You are going to create a PAT for some "utility" user in the Azure DevOps project to allow your code access the Azure Repo in the Azure DevOps project. (There is a current Databricks limitation in directly granting the Service Principal git credentials with any git provider.)
+
+Use this user for `ado_username` and `ado_username_pat`.
 
 
-## 4. Set up Azure Repo account
+## 5. Register Azure Pipelines
+![Alt text](image-11.png)
 
-[TODO: replace the actions here with revised instructions]
+![Alt text](image-12.png)
 
+![Alt text](image-13.png)
 
-The last two tasks include:
-   - Creating a Personal Access Token (PAT) in Github
-   - Adding a Service Principal (SP) to your forked repository in Github
+![Alt text](image-14.png)
 
+Select `/.azure_pipelines/workshop_unit_test.yml`.
 
-### 4.1 Create PAT (Personal Access Token)
-
-You are going to create PAT to allow your code access your personal git repo
-
-- To make PAT, you need to go to Settings of your account, NOT repo setting
-
-    ![](./images/github4003.png)
-
-- From the setting, find and __click__ '_<> Developer settings_' menu at the bottom left conner of your screen
-
-    ![](./images/github4004.png)
-
-- __Click__ '_Personal access token_' and __click__ '_Generate new token_'
-
-    ![](./images/github4005.png)
-
-- Check for '_repo_' and '_workflow_' for the scope and then __click__ '_create_' at the bottom of your screen
-
-    ![](./images/github4006.png)
-
-- You'll see the token. Make sure you copy and keep it safe. 
-
-    ![](./images/github4007.png)
-
-- Now you're going to add the token to your repo
-
-- Go back to your 'MLOpsTemplate' repo where your forked from microsoft/MLOpsTemplate
-
-    - The url of your repo will looks like this
-
-        ```text
-        https://github.com/{YOURACCOUNT}}/MLOpsTemplate
-        ```
-
-- From your repo __click__ '_Setting_'
-
-    ![](./images/github4000.png)
-
-- Find a menu '_Secrets_' on the left side of menu, and __click__ 'Actions'. After that __Click__ 'New repository secret'
-
-    ![](./images/github4001.png)
-
-- Type `PERSONAL_ACCESS_TOKEN_GITHUB` for the name of the secret, and paste the token you copied from PAT section
-
-    > Important: The name for this secret must be `PERSONAL_ACCESS_TOKEN_GITHUB`
-
-    ![](./images/github4008.png)
+Save.
 
 
-
-
-### 4.2 Add SP to your repo in Github
-
-From this section, you'll add the SP information to your repo. The SP information will be used during the Github Actions.
-
-You have saved in step A9, B9 or C7 the output of the SP creation command, it should look like this:
-
-```json
-{
-	"clientId": "YOUR_APP_ID",
-	"clientSecret": "YOUR_CLIENT_SECRET",
-	"subscriptionId": "SUB_ID",
-	"tenantId": "TENANT_ID",
-	"activeDirectoryEndpointUrl": "https://login.microsoftonline.com",
-	"resourceManagerEndpointUrl": "https://management.azure.com/",
-	"activeDirectoryGraphResourceId": "https://graph.windows.net/",
-	"sqlManagementEndpointUrl": "https://management.core.windows.net:8443/",
-	"galleryEndpointUrl": "https://gallery.azure.com/",
-	"managementEndpointUrl": "https://management.core.windows.net/"
-}
-```
-
-- Go back to your 'MLOpsTemplate' repo where your forked from microsoft/MLOpsTemplate
-
-    - The url of your repo will looks like this
-
-        ```text
-        https://github.com/{YOURACCOUNT}}/MLOpsTemplate
-        ```
-
-- From your repo __click__ '_Setting_'
-
-    ![](./images/github4000.png)
-
-- Find a menu '_Secrets_' on the left side of menu, and __click__ 'Actions'. After that __Click__ 'New repository secret'
-
-    ![](./images/github4001.png)
-
-- Type `AZURE_SERVICE_PRINCIPAL` for the name of the secret, and paste your SP json definition:
-
-    > Important: The name for this secret must be `AZURE_SERVICE_PRINCIPAL`
-
-    ![](./images/github4002.png)
-
-## 5. Set up Azure DevOps
 
 ## 6. Generate and store data
+
+In Databricks, navigate to your Databricks Repo and to the notebook `/src/workshop/notebooks/part_0_create_datasets` and run it.
+
+![Alt text](image-15.png)
+
+![Alt text](image-16.png)
+
 
 ## [Go to Part 1](part_1.md)
