@@ -1,7 +1,7 @@
 # Part 0: Workshop Environment Setup
 > NOTE: The Workshop is designed to take place in a customer environment and requires an Azure AD Service Principal, including the Azure AD token for the Service Principal. Many data science and ML platform teams will need to submit a service request for a Service Principal. Plan in enough time for this service request to be processed.
 
-Read the Workshop scenario overview [here](https://github.com/microsoft/MLOpsTemplate/blob/main/src/workshop/README.md#workshop-scenario)
+Read the Workshop scenario overview [here](https://github.com/microsoft/MLOpsTemplate/blob/main/src/workshop/README.md#workshop-scenario).
 
 The steps described here in Part 0 prepare Azure Databricks, Azure DevOps, and an Azure AD Service Principal to serve as the MLOps platform. These steps are to be performed by the platform administrators so that data scientists can start with Part 1 without getting overwhelmed with the infrastructure details involved in getting the core pieces of the MLOps platform linked together.
 
@@ -14,14 +14,14 @@ The steps described here in Part 0 prepare Azure Databricks, Azure DevOps, and a
     - Git mechanics (in this workshop we use Azure Repos and Databricks Repos)
 
 ## Steps
-0. [Check list](./part_tips.md)  
 
-1. [Create a Service Principal in Azure Active Directory (Azure AD).](#1-Create-an-Azure-AD-Service-Principal)
-2. [Add the Service Principal to your Azure Databricks workspace.](#2-Add-the-Service-Principal-to-your-Azure-Databricks-workspace)
-3. [Generate an Azure AD token for the Service Principal.](#3-generate-an-azure-ad-token-for-the-service-principal)
-4. [Set up Azure Repo account.](#4-set-up-azure-repo-account)
-5. [Set up Azure DevOps.](#5-set-up-azure-devops)
-6. [Generate and store data.](#6-generate-and-store-data)
+1. [Create a Service Principal in Azure Active Directory](#1-Create-a-Service-Principal-in-Azure-Active-Directory).
+2. [Add the Service Principal to your Azure Databricks workspace](#2-Add-the-Service-Principal-to-your-Azure-Databricks-workspace).
+3. [Add the Service Principal to Azure DevOps](#3-Add-the-Service-Principal-to-Azure-DevOps).
+4. [Create variable group in Azure DevOps](#4-set-up-azure-repo-account).
+5. [Register Azure Pipelines](#5-set-up-azure-devops).
+6. [Grant data scientists Azure DevOps permissions and user access](#6-generate-and-store-data).
+7. [Generate and store data](#7-generate-and-store-data).
 
 
 ## 1. Create an Azure AD Service Principal
@@ -42,7 +42,7 @@ The steps described here in Part 0 prepare Azure Databricks, Azure DevOps, and a
     > Note: You will have the same repository (`MLOpsTemplate`) under your Github account name.
     > Leave the tab open and **do not** close it yet. You will come back to your repository.
 
-## 3. Generate an Azure AD token for the Service Principal
+## 3. Add the Service Principal to Azure DevOps
 
 [TODO: replace the actions here with revised instructions]
 
