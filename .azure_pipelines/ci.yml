@@ -138,7 +138,8 @@ steps:
             "notebook_path": "src/workshop/notebooks/part_1_3_evaluating",
             "source": "GIT",
             "base_parameters": {
-              "run_name": "'"$(BRANCH_NAME)"'"
+              "run_name": "'"$(BRANCH_NAME)"'",
+              "devops_action": "Integration"
             }
           },
           "depends_on": [ {"task_key": "model_training"} ],
