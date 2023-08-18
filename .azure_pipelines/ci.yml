@@ -11,6 +11,12 @@
 # - ado_username: username for Azure DevOps with repo access to share with service principal
 # - ado_username_pat: ADO personal_access_token for username
 
+parameters:
+- name: run_name
+  displayName: Your Name
+  type: string
+  default: $[replace(variables['Build.SourceBranch'], 'refs/heads/', '')]
+
 trigger:
   branches:
     exclude:
@@ -44,7 +50,7 @@ steps:
 
     echo "##vso[task.setvariable variable=token;issecret=true]$token"
 
-  displayName: 'Get Azure AD / Entra ID token'
+  displayName: 'Get Entra ID token'
   env:
     SP_CREDENTIAL: $(sp_credential)
 
@@ -115,7 +121,7 @@ steps:
             "notebook_path": "src/workshop/notebooks/part_1_1_data_prep",
             "source": "GIT",
             "base_parameters": {
-              "data_location": "run it again"
+              "run_name": "${{ parameters.run_name }}"
             }
           },
           "new_cluster": '"$cluster_def"'
@@ -126,7 +132,7 @@ steps:
             "notebook_path": "src/workshop/notebooks/part_1_2_training",
             "source": "GIT",
             "base_parameters": {
-              "data_location": "run it again"
+              "run_name": "${{ parameters.run_name }}"
             }
           },
           "depends_on": [ {"task_key": "data_prep"} ],
@@ -138,7 +144,7 @@ steps:
             "notebook_path": "src/workshop/notebooks/part_1_3_evaluating",
             "source": "GIT",
             "base_parameters": {
-              "data_location": "run it again"
+              "run_name": "${{ parameters.run_name }}"
             }
           },
           "depends_on": [ {"task_key": "model_training"} ],
@@ -148,13 +154,19 @@ steps:
       ],
       "git_source": {
         "git_provider": "azureDevOpsServices",
-        "git_url": "'"$(System.CollectionUri)$(System.TeamProject)"/_git/"$(System.TeamProject)"'",
+        "git_url": "'"$(System.CollectionUri)$(System.TeamProject)"/_git/"$(Build.Repository.Name)"'",
         "git_branch": "'"$(BRANCH_NAME)"'"
-      }
+      },
+      "access_control_list": [
+        {
+          "group_name": "users",
+          "permission_level": "CAN_VIEW"
+        }
+      ]
     }' \
     $(databricks_workspace_uri)/api/2.1/jobs/runs/submit)
 
-    echo "'"$(System.CollectionUri)$(System.TeamProject)"/_git/"$(System.TeamProject)"'"
+    echo Using Git URL: "'"$(System.CollectionUri)$(System.TeamProject)"/_git/"$(Build.Repository.Name)"'"
 
     echo $result
 
