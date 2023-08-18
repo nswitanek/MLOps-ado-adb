@@ -15,7 +15,7 @@ parameters:
 - name: run_name
   displayName: Your Name
   type: string
-  default: $[replace(variables['Build.SourceBranch'], 'refs/heads/', '')]
+  default: ${{ replace(variables['Build.SourceBranch'], 'refs/heads/', '') }}
 
 trigger:
   branches:
