@@ -95,7 +95,16 @@ Save and rename to "Continuous Delivery Pipeline."
 
 
 
-## 6. Generate and store data
+## 7. Set up branch protection policies in Azure Repo
+### 7.1 Integration branch policies
+Require approval of merges to `integration`, which triggers the CI pipeline, permitting requestor to approve their own changes.
+![Integration branch policies](images/part_0_integration_policies.png)
+
+### 7.2 Main branch policies
+Require approval from two people for merges to `main`, which triggers the CD pipeline, and prohibit the pusher from approving their own changes.
+![Main branch policies](images/part_0_main_policies.png)
+
+## 8. Generate and store data
 
 In Databricks, navigate to your Databricks Repo and to the notebook `/src/workshop/notebooks/part_0_create_datasets` and run it.
 
