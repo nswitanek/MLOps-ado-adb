@@ -31,20 +31,19 @@ The steps described here in Part 0 prepare Azure Databricks, Azure DevOps, and a
 
 ## 2. Add the Service Principal to your Azure Databricks workspace
 
-![Databricks Admin Console > Add service principal](part_0_adb_add_sp.png)
-
+![Databricks Admin Console > Add service principal](images/part_0_adb_add_sp.png)
 
 ## 3. Add the Service Principal to Azure DevOps
 
-![Azure DevOps > Project Settings > Teams > Add service principal](part_0_ado_add_sp.png)
+![Azure DevOps > Project Settings > Teams > Add service principal](images/part_0_ado_add_sp.png)
 
 
 ## 4. Create a variable group in Azure DevOps
 
-![Alt text](image-9.png)
+![Alt text](images/image-9.png)
 
 Grant open access to pipelines? Or maybe just to the pipelines that are registered.
-![Alt text](image-10.png)
+![Alt text](images/image-10.png)
 
 
 ### 4.1 Choose ADO "utility" user and create PAT (Personal Access Token)
