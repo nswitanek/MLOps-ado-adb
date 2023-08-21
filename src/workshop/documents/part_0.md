@@ -55,17 +55,44 @@ Use this user for `ado_username` and `ado_username_pat`.
 
 
 ## 5. Register Azure Pipelines
-![Alt text](image-11.png)
+![Alt text](images/image-11.png)
 
-![Alt text](image-12.png)
+![Alt text](images/image-12.png)
 
-![Alt text](image-13.png)
+![Alt text](images/image-13.png)
 
-![Alt text](image-14.png)
+![Alt text](images/image-14.png)
+
+Go to the Pipelines section and select "New pipeline".
+
+![Pipelines view in Azure DevOps](images/part_2_ado_pipe1.png)
+
+Select your MLOps-ado-adb repo.
+
+![Pipelines select repo step](images/part_2_ado_pipe2.png)
+
+Configure your pipeline using an "Existing Azure Pipelines YAML file":
+![Pipelines configure step](images/part_2_ado_pipe3.png)
+
+Select the `.azure_pipelines/workshop_unit_test.yml` Azure Pipelines YAML file in your branch of the repo, (not in the main branch).
+
+![Pipelines select yaml step](images/part_2_ado_pipe4.png)
+
+Give your pipeline a Pipeline Name of "Data Prep Unit Test Pipeline", the click the "Save and run" button to manually trigger the pipeline.
+![Pipelines review step](images/part_2_ado_pipe5.png)
+
 
 Select `/.azure_pipelines/workshop_unit_test.yml`.
 
-Save.
+Save and rename to "Data Prep Unit Test Pipeline."
+
+Select `/.azure_pipelines/ci.yml`.
+
+Save and rename to "Continuous Integration Pipeline."
+
+Select `/.azure_pipelines/cd.yml`.
+
+Save and rename to "Continuous Delivery Pipeline."
 
 
 
@@ -73,9 +100,9 @@ Save.
 
 In Databricks, navigate to your Databricks Repo and to the notebook `/src/workshop/notebooks/part_0_create_datasets` and run it.
 
-![Alt text](image-15.png)
+![Alt text](images/image-15.png)
 
-![Alt text](image-16.png)
+![Alt text](images/image-16.png)
 
 
 ## [Go to Part 1](part_1.md)
