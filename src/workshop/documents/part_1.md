@@ -5,9 +5,9 @@
 
 
 ## Summary 
-Your team has been working on a new ML problem. The team has done initial exploratory work preparing the data and fitting models and has now come to a state that the solution direction is mostly solidified. Now, it is time to structure the work so that the team can systematically and quickly iterate towards an improved and deployable solution.   
+Your team has been working on a new ML problem. The team has done initial exploratory work preparing the data and fitting models and has now come to a state that the solution direction is mostly solidified. Now it is time to structure the work so that workflow that produces a deployed model is hardened and made maintainable, while also enabling the teamto iterate on it, systematically and quickly, to continue to improve on the deployable solution.   
 
-So far, team members have been working mostly independently in Azure Databricks notebooks that handle their end-to-end model development workflow. To enable more effective collaboration for continuous improvement and easier maintenance of the workflow, they will benefit from breaking the workflow into separately maintainable but linked parts.
+So far team members have been working mostly independently in Azure Databricks notebooks that handle their end-to-end model development workflow. To enable more effective collaboration for continuous improvement and easier maintenance of the workflow, they will break the workflow into separately maintainable but linked parts.
 
 As a first step towards MLOps, the team needs to accomplish the following:  
 
