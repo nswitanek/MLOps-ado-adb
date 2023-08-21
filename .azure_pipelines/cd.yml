@@ -22,7 +22,7 @@ trigger:
       - src/workshop/notebooks/part_1_1_data_prep.ipynb
       - src/workshop/notebooks/part_1_2_training.ipynb
       - src/workshop/notebooks/part_1_3_evaluating.ipynb
-      - .azure_pipelines/ci.yml
+      - .azure_pipelines/cd.yml
 
 pool:
   vmImage: ubuntu-latest
