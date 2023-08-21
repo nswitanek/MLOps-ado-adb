@@ -9,10 +9,10 @@ Your team has been working on a new ML problem. The team has done initial explor
 
 So far team members have been working mostly independently in Azure Databricks notebooks that handle their end-to-end model development workflow. To enable more effective collaboration for continuous improvement and easier maintenance of the workflow, they will break the workflow into separately maintainable but linked parts.
 
-As a first step towards MLOps, the team needs to accomplish the following:  
+As a first step towards MLOps, the team needs to do the following:  
 
-- Modularization: A monolithic Databricks notebook is refactored into smaller, "module" notebooks that focus on a particular stage in the overall model development lifecycle and can be developed and tested independently and in parallel by multiple members.
-- Parameterization: The modular notebooks are parameterized so that they be rerun with different parameter values.
+- Modularize: A single, end-to-end Databricks notebook is refactored into a linked sequence of smaller, "module" notebooks that each focus on a particular stage in the overall model development lifecycle. Modular notebooks can be more easily developed and tested independently and in parallel by multiple members.
+- Parameterize: The modular notebooks are parameterized so that they be rerun with different parameter values.
 
 To illustrate how the process works, the monolithic notebook was refactored into a feature engineering notebook, a model training notebook, and an evaluation notebook. You will run these modules individually to see how they work.
 
@@ -22,9 +22,9 @@ To illustrate how the process works, the monolithic notebook was refactored into
 
 > Note: You can review notebooks and run the following tasks in the Databricks Repo in your Azure Databricks workspace. 
 
-0. Navigate to `Repos/{your Databricks user account}/MLOps-ado-adb/src/workshop/notebooks`. Repos may either be within your Workspace tab in the sidebar, or be a separate tab.
+0. Navigate to `Repos/{your Databricks user account}/MLOps-ado-adb/src/workshop/notebooks`. Depending on your version of the Databricks UI, Repos may either be found within your Workspace tab in the sidebar, or instead be found in a separate tab.
 
-![Databricks Repo file explorer](part_1_db_repo_file_explorer.png)
+![Databricks Repo file explorer](images/part_1_db_repo_file_explorer.png)
 
 
 1. Familiarize yourself with the steps in the
@@ -37,28 +37,27 @@ To illustrate how the process works, the monolithic notebook was refactored into
 Now observe how the monolithic notebook was refactored into a data prep or feature engineering module, a model training module, and a model evaluation module so that each step in the overall process can be developed and run independently.
 
 3. The basic version control and git branching strategy we'll use is as follows:
-- the `main` branch contains all the code used to develop the model in production 
-- the `integration` branch starts as a complete copy of `main`
-- data scientists and engineers create development or feature branches off of `integration` with names like `dev-{yourname}` to experiment with changes to some part of the workflow, in the hopes of finding an improvement in the models produced by the workflow
-- if results are promising, the work done in `dev-{yourname}` is merged into `integration`
-- if the new work results in a model that outperforms the production model in `main`, then the new code in `integration` becomes the new `main`, and the model is updated to reflect the new ML model training workflow.
+- The `main` branch contains all the code used to develop the model in production 
+- The `integration` branch starts as a complete copy of `main`
+- Data scientists and data engineers create development or feature branches off of `integration` with names like `dev-{yourname}` to experiment with changes to some part of the workflow, in the hopes of finding an improvement in the models produced by the workflow
+- If results are promising, the work done in `dev-{yourname}` is merged into `integration`
+- If the new work results in a model that outperforms the production model in `main`, then the new code in `integration` becomes the new `main`, and the model is updated to reflect the new ML model training workflow.
 
-[TODO: consider distinguishing between version control strategies wrt models and code; insert diagrams from databricks MLOps guidance]
 
 4. In your Databricks Repo, create your own development branch off of the `integration` branch where you can make and track changes. This branch will be your development area to create and test new code or pipelines before committing or merging the code back into a common branch, such as `integration`.
 
 To do this, right-click the `/MLOps-ado-adb` folder in your Databricks Repos section of your Workspace, and select the "Git..." option from the drop-down menu.
 
-![Git options from Databricks Repo](part_1_git_options_from_adb_repo.png)
+![Git options from Databricks Repo](images/part_1_git_options_from_adb_repo.png)
 
 In the next screen, make sure the `integration` branch is selected from the drop-down menu.
-![Databricks Repo branch UI with integration default](part_1_branch_ui_integration.png)
+![Databricks Repo branch UI with integration default](images/part_1_branch_ui_integration.png)
 
-Select "Create Branch." In the next screen, type "dev-{yourname}" in the "Branch name" field and "Create" the branch based on "Branch: integration".
-![Databricks Repo create dev branch based on integration branch](part_1_adb_create_branch.png)
+Select "Create Branch." In the next screen, type `dev-{yourname}` in the "Branch name" field and "Create" the branch based on "Branch: integration".
+![Databricks Repo create dev branch based on integration branch](images/part_1_adb_create_branch.png)
 
 After you've created the branch, close the branch window and confirm that `dev-{yourname}` appears in the filepath at the top of the Repos view in Azure Databrcks:
-![Databricks Repo file explorer with dev branch selected](image-8.png)
+![Databricks Repo file explorer with dev branch selected](images/part_1_adb_file_exp_dev.png)
 
 While your dev branch is selected, you'll be looking at version-controlled copies of the files from the integration branch. Any changes you make to the files while on your branch will only be reflected in your branch, and not in other branches. 
 
@@ -75,7 +74,6 @@ This modular notebook focused on data prep does the following:
 - Saves the prepared data to dbfs.
 
 At the top of the notebook, you'll see comments indicating where to change some parameters regarding the path to where you write the prepared dataset. We do this in the context of the workshop so you aren't overwriting the datasets created by other workshop participants.
-[TODO: update the notebook to require parameters at the top]
 
 Run this notebook.
 
@@ -89,11 +87,10 @@ This modular notebook focused on model training does the following:
 - Registers the model to the Model Registry and labels it as "Staging"
 
 Change the parameters at the top of the notebook to read the dataset from where you write it in the data prep notebook, and to establish a mlflow model path specific to you. 
-[TODO: update the notebook to require parameters at the top]
 
 Run this notebook.
 
-7. Review the refactored model evaluation logic in the `part_1_3_evaluating.ipynb`
+7. Review the refactored model evaluation logic in the `notebooks/part_1_3_evaluating.ipynb` notebook.
 
 This modular notebook focused on model evaluation does the following:
 
@@ -103,25 +100,19 @@ This modular notebook focused on model evaluation does the following:
 - If no prior trained model exists, the model will be registered as a baseline model in production.
 - If a production model is found, the evaluation metrics for that model will be compared against metrics for the newly trained model and if the new model's metrics surpass those of the current production model, the new model will be registered to production. If not, the notebook exits and raises an exception. 
 
-Change the parameters at the top of the evaluation notebook to read the model from the path in the mlflow model registry where you saved it in the training notebook, and reads the test data from your path to the data that you established in the data prep notebook.
-[TODO: update the notebook to require parameters at the top]
+Change the parameters at the top of the evaluation notebook to read the model from the path in the mlflow model registry where you saved it in the training notebook.
 
 Run this notebook.
 
-8. Navigate to the Models section of Azure Databricks to see that a model is produced with name "wine_quality_{yourname}" and labeled as Production. This will be your baseline model that your uture iterative development of parts of the ML workflow will aim to beat.
+8. Navigate to the Models section of Azure Databricks to see that a model is produced with name `wine_quality_{yourname}` and labeled as Production. This will be your baseline model that your future iterative development of parts of the ML workflow will aim to beat.
 
-![Databricks Registered Models View](part_1_model_registry.png)
+![Databricks Registered Models View](images/part_1_model_registry.png)
 
 ## Success criteria
 - Data prep notebook runs and writes prepared data to dbfs.
 - Model training notebook creates and registers a model.
 - Model evaluation notebook either promotes a model to production or exits.
 
-
-## Reference materials
-- [Databricks Repos]()
-- [Parameterizing Databricks Jobs]()
-- [Databricks Model Registry]()
 
 ## [Go to Part 2](part_2.md)
 
