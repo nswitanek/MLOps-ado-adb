@@ -21,7 +21,8 @@ The steps described here in Part 0 prepare Azure Databricks, Azure DevOps, and a
 4. Create a variable group in Azure DevOps
 5. Register Azure Pipelines
 6. Grant workshop participants Azure DevOps permissions and user access
-7. Generate and store data
+7. Set up branch protection policies in Azure Repo
+8. Generate and store data
 
 
 ## 1. Create a Service Principal in Azure Active Directory
@@ -93,6 +94,7 @@ Select `/.azure_pipelines/cd.yml`.
 
 Save and rename to "Continuous Delivery Pipeline."
 
+## 6. Grant workshop participants Azure DevOps permissions and user access
 
 
 ## 7. Set up branch protection policies in Azure Repo
