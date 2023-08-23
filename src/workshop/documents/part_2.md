@@ -26,7 +26,7 @@ To introduce these concepts you will next do the following:
 In the first line we see `curl -X POST`, which means we're using a command-line utility, curl, to issue a request to a URL address.
 At the bottom we see where the request is sent, to `$(databricks_workspace_uri)/api/2.1/jobs/run-now`. The `$(databricks_workspace_uri)` part is a variable referring to the URI of your Databricks instance, which corresponds to what you can find in the address bar of your browser and is of the form "https://{some string}.azuredatabricks.net/". 
 
-Many variables used in this pipeline were specified in Part 0 as part of the platform setup, and they are in the Azure DevOps library as a variable group.
+Many variables used in this pipeline were specified in Part 0 during the platform setup, and they are in the Azure DevOps library as a variable group. Those can include secured secrets, including those in a linked Azure Key Vault.
 
 
 After that is the `/api/2.1/jobs/run-now`, which is how we express the command to run the notebook.
