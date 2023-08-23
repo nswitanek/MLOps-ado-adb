@@ -24,7 +24,7 @@ The core focus of the workshop will then be how to refactor this notebook for ea
 - Get hands-on experience in building continuous integration and continuous deployment pipelines with Azure DevOps.
 
 
-Now, head to [Workshop Environment Setup: Part 0](https://github.com/microsoft/MLOpsTemplate/blob/main/src/workshop/documents/part_0.md)
+Now, head to [Workshop Environment Setup: Part 0](src/workshop/documents/part_0.md)
 
 
 ## Contributing
