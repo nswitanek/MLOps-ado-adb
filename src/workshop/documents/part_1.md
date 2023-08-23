@@ -11,8 +11,8 @@ So far team members have been working mostly independently in Azure Databricks n
 
 As a first step towards MLOps, the team needs to do the following:  
 
-- Modularize: A single, end-to-end Databricks notebook is refactored into a linked sequence of smaller, "module" notebooks that each focus on a particular stage in the overall model development lifecycle. Modular notebooks can be more easily developed and tested independently and in parallel by multiple members.
-- Parameterize: The modular notebooks are parameterized so that they be rerun with different parameter values.
+- Modularize: A single, end-to-end Databricks notebook is refactored into a linked sequence of smaller, "module" notebooks that each focus on a particular stage in the overall model development lifecycle. Modular notebooks can be more easily developed and tested independently and in parallel by multiple members. 
+- Parameterize: The modular notebooks are parameterized so that they be rerun with different parameter values to exhibit different behavior. We can thus use parameters to, for example, load only ten days of data during unit testing, setting parameter `days=10`, while six months of data during model training that happens during integration testing in the CI pipeline, `days=180`.
 
 To illustrate how the process works, the monolithic notebook was refactored into a feature engineering notebook, a model training notebook, and an evaluation notebook. You will run these modules individually to see how they work.
 
@@ -34,7 +34,7 @@ To illustrate how the process works, the monolithic notebook was refactored into
    
 2. Ask yourself, and discuss with your team, why putting the entire workflow into a single notebook is a challenge to scalable and repeatable ML development.
 
-Now observe how the monolithic notebook was refactored into a data prep or feature engineering module, a model training module, and a model evaluation module so that each step in the overall process can be developed and run independently.
+Now observe how the monolithic notebook was refactored into a data prep or feature engineering module, a model training module, and a model evaluation module so that each step in the overall process can be developed and run independently. One thing to note about the new modules is that they contain both the code from the monolithic notebook, as well as a definition of the interface, the inputs and outputs needed and produced by the code, so that the modules can be linked together to replicate the entire workflow represented in the monolithic notebook. Additionally, modules can be parameterized so that they behave differently depending on what parameters are passed to them, either during interactive testing, or later on in this workshop, by pipelines that run at different stages in the MLOps lifecycle.
 
 3. The basic version control and git branching strategy we'll use is as follows:
 - The `main` branch contains all the code used to develop the model in production 
